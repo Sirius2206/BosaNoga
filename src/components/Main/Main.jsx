@@ -1,18 +1,27 @@
 import { Routes, Route } from "react-router";
+import MainPage from "./MainPage";
 import About from "./About";
 import Catalog from "./Catalog";
 import Contacts from "./Contacts";
+import Banner from "./Banner";
+import Cart from "./Cart";
+import NotFound from "./NotFound";
 
-function Main() {
+function Shop() {
   return (
     <div>
-    <Routes>
-      <Route path="/about" element={<About />} />
-      <Route path="/catalog" element={<Catalog />} />
-      <Route path="/contacts" element={<Contacts />} />
-    </Routes>
+      <Banner >
+        <Routes> 
+          <Route path="/" element={<MainPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/catalog" element={<Catalog />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/cart" element = {<Cart />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Banner>
     </div>
   );
 }
 
-export default Main;
+export default Shop;
