@@ -4,7 +4,7 @@ import Catalog from "./Catalog";
 
 
 function Main() {
-  const [bestsellers] = useJsonFetch("http://localhost:7070/api/top-sales");
+  const [bestsellers] = useJsonFetch(process.env.REACT_APP_URL + "/api/top-sales");
 
   return (
     <>

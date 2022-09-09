@@ -50,6 +50,6 @@ export const catalogListSlice = createSlice({
   }
 });
 
-export const { changeCategory } = catalogListSlice.actions;
+export const { changeCategory,reloadList } = catalogListSlice.actions;
 
 export default catalogListSlice.reducer;
