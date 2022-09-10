@@ -7,8 +7,8 @@ export const fetchCatalog = createAsyncThunk(
     return result;
   }
 )
-export const loadMore = createAsyncThunk(
-  "catalogList/loadMore",
+export const handleMore = createAsyncThunk(
+  "catalogList/handleMore",
   async function (url) {
     const result = await fetch(url).then(result => result.json());
     return result;
@@ -21,12 +21,6 @@ export const catalogListSlice = createSlice({
     list: [],
     status: null,
     error: null,
-    currentCategory: "http://localhost:7070/api/items"
-  },
-  reducers: {
-    changeCategory: (state, action) => {
-      state.currentCategory = action.payload;
-    },
   },
   extraReducers: {
     [fetchCatalog.pending]: (state) => {
@@ -35,21 +29,22 @@ export const catalogListSlice = createSlice({
     },
     [fetchCatalog.fulfilled]: (state, action) => {
       state.status = null;
+      console.log(action.payload);
       state.list = action.payload;
     },
     [fetchCatalog.rejected]: (state, action) => {},
-    [loadMore.pending]: (state) => {
+    [handleMore.pending]: (state) => {
       state.status = "loading";
       state.error = null;
     },
-    [loadMore.fulfilled]: (state, action) => {
+    [handleMore.fulfilled]: (state, action) => {
       state.status = null;
       state.list = [...state.list, ...action.payload];
     },
-    [loadMore.rejected]: (state, action) => {},
+    [handleMore.rejected]: (state, action) => {},
   }
 });
 
-export const { changeCategory,reloadList } = catalogListSlice.actions;
+export const { changeCategory, reloadList, test } = catalogListSlice.actions;
 
 export default catalogListSlice.reducer;

@@ -1,5 +1,5 @@
 import useJsonFetch from "../../hooks/useJsonFetch";
-import Card from "../Cards/Card";
+import CardSmall from "../Cards/CardSmall";
 import Catalog from "./Catalog";
 
 
@@ -15,12 +15,12 @@ function Main() {
           </h2>
           <div className="row">
             {bestsellers.map((item) => (
-              <Card key={item.id} data={item} top />
+              <CardSmall key={item.id} data={item} top />
             ))}
           </div>
         </section>
       )}
-      <Catalog withInput/>
+      <Catalog mainPage/>
     </>
   );
 }

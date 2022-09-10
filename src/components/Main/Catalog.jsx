@@ -1,101 +1,80 @@
-import Card from "../Cards/Card";
+import CardSmall from "../Cards/CardSmall";
 import Category from "../Categories/Category";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  changeCategory,
-
   fetchCatalog,
-  loadMore,
+  handleMore,
 } from "../../store/slices/catalogListSlice";
-import { changeSearchValue } from "../../store/slices/searchSlice";
-import useJsonFetch from "../../hooks/useJsonFetch";
-import { useState, useEffect } from "react";
 
-function Catalog({ withInput }) {
+import { useState, useEffect } from "react";
+import { changeCategory, fetchCategories } from "../../store/slices/categoriesSlice";
+import SearchInput from "./SearchInput";
+
+function Catalog({ mainPage }) {
   const [visible, setVisible] = useState("");
 
-  const loadingStatus = useSelector((state) => state.catalogList.status);
-  const currentCategory = useSelector(
-    (state) => state.catalogList.currentCategory
-  );
-  const catalog = useSelector((state) => state.catalogList.list);
-  const searchValue = useSelector((state) => state.searchInput.searchValue);
+  const {status, list } = useSelector((state) => state.catalogList);
+  const { searchValue } = useSelector((state) => state.searchInput)
+  const { currentCategory, categoriesList } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
-
-  const [categories] = useJsonFetch(
-    process.env.REACT_APP_URL + "/api/categories"
-  );
 
   useEffect(() => {
     dispatch(fetchCatalog(process.env.REACT_APP_URL + "/api/items"));
+    dispatch(fetchCategories(process.env.REACT_APP_URL + "/api/categories"))
   }, []);
 
-  const handleChange = (evt) => {
-    const { value } = evt.target;
-    dispatch(changeSearchValue(value));
-  };
+  const allCategoriesList = [{
+    id: 0,
+    title: "Все"
+  }, ...categoriesList];
 
-  function onLoadMore(e) {
-    const offset = catalog.length;
-    let addUrl = `&offset=${offset}`;
-    if (currentCategory === process.env.REACT_APP_URL + "/api/items")
-      addUrl = `?offset=${offset}`;
-    fetch(currentCategory + addUrl)
+
+
+  function onHandleMore(e) {
+    e.preventDefault();
+    const offset = list.length;
+    const addOffset = `offset=${offset}`;
+    let requestUrl = process.env.REACT_APP_URL + "/api/items?";
+    if (searchValue) requestUrl += `q=${searchValue}&`;
+    if (currentCategory !== 0) {
+      requestUrl += `categoryId=${currentCategory}&`
+    }
+    fetch(requestUrl + addOffset)
       .then((result) => result.json())
       .then((result) => {
         if (result.length < 6) setVisible(" invisible");
       });
-    dispatch(loadMore(currentCategory + addUrl));
+    dispatch(handleMore(requestUrl+ addOffset));
   }
 
   function handleSearch(e) {
     e.preventDefault();
     setVisible("");
-    const searchRequest = process.env.REACT_APP_URL + "/api/items?q=" + searchValue;
-    fetch(searchRequest)
+    const requestURL = process.env.REACT_APP_URL + "/api/items?q=" + searchValue;
+    fetch(requestURL)
       .then((result) => result.json())
       .then((result) => {
-        console.log(result);
         if (result.length < 6) setVisible(" invisible");
       });
-      dispatch(fetchCatalog(searchRequest));
-      dispatch(changeCategory(searchRequest));
+      dispatch(fetchCatalog(requestURL));
+      dispatch(changeCategory(0));
   }
 
   return (
-    <section className="catalog">
+    <section className="list">
       <h2 className="text-center">Каталог</h2>
-      {withInput || (
+      {mainPage || (
         <form
-          className="catalog-search-form form-inline"
+        id="catalog-search"
+          className="list-search-form form-inline"
           onSubmit={handleSearch}
-          
         >
-          <input
-            className="form-control"
-            placeholder="Поиск"
-            onChange={handleChange}
-            value={searchValue}
-          />
+          <SearchInput />
         </form>
       )}
-      <ul className="catalog-categories nav justify-content-center">
-        <li className="nav-item">
-          <a
-            className="nav-link active"
-            onClick={() => {
-              dispatch(fetchCatalog(process.env.REACT_APP_URL + "/api/items"));
-              dispatch(
-                changeCategory(process.env.REACT_APP_URL + "/api/items")
-              );
-              setVisible("");
-            }}
-          >
-            Все
-          </a>
-        </li>
-        {categories &&
-          categories.map((category) => (
+      <ul className="list-categories nav justify-content-center">
+        {allCategoriesList &&
+          allCategoriesList.map((category) => (
             <Category
               key={category.id}
               data={category}
@@ -104,13 +83,13 @@ function Catalog({ withInput }) {
           ))}
       </ul>
       <div className="row">
-        {!loadingStatus &&
-          catalog.map((item) => <Card key={item.id} data={item} />)}
+        {!status &&
+          list.map((item) => <CardSmall key={item.id} data={item} />)}
       </div>
       <div className="text-center">
         <button
           className={"btn btn-outline-primary" + visible}
-          onClick={onLoadMore}
+          onClick={onHandleMore}
         >
           Загрузить ещё
         </button>

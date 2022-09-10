@@ -5,12 +5,12 @@ export default function useJsonFetch(url, opts) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const timestampRef = useRef();
-
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const timestamp = Date.now();
       timestampRef.current = timestamp;
-      setLoading(true);
+      
       try {
         const response = await fetch(url);
         if (!response.ok) {
