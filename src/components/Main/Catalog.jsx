@@ -9,11 +9,12 @@ import {
 import { useState, useEffect } from "react";
 import { changeCategory, fetchCategories } from "../../store/slices/categoriesSlice";
 import SearchInput from "./SearchInput";
+import Preloader from "../Preloader/Preloader";
 
 function Catalog({ mainPage }) {
   const [visible, setVisible] = useState("");
 
-  const {status, list } = useSelector((state) => state.catalogList);
+  const { status, list } = useSelector((state) => state.catalogList);
   const { searchValue } = useSelector((state) => state.searchInput)
   const { currentCategory, categoriesList } = useSelector((state) => state.categories);
   const dispatch = useDispatch();
@@ -72,7 +73,7 @@ function Catalog({ mainPage }) {
           <SearchInput />
         </form>
       )}
-      <ul className="list-categories nav justify-content-center">
+     {status ? <Preloader /> : <><ul className="list-categories nav justify-content-center">
         {allCategoriesList &&
           allCategoriesList.map((category) => (
             <Category
@@ -83,9 +84,9 @@ function Catalog({ mainPage }) {
           ))}
       </ul>
       <div className="row">
-        {!status &&
-          list.map((item) => <CardSmall key={item.id} data={item} />)}
-      </div>
+        
+          {list.map((item) => <CardSmall key={item.id} data={item} />)}
+      </div></>}
       <div className="text-center">
         <button
           className={"btn btn-outline-primary" + visible}

@@ -8,6 +8,7 @@ import SearchInput from "../Main/SearchInput";
 function Header() {
   const [searchVisible, setVisible] = useState(false);
   const { searchValue } = useSelector((state) => state.searchInput)
+  const { cart } = useSelector(state => state.cart);
   let navigate = useNavigate();
 
   function handleSubmit() {
@@ -53,7 +54,7 @@ function Header() {
                     className="header-controls-pic header-controls-cart"
                     to="/cart"
                   >
-                    <div className="header-controls-cart-full">1</div>
+                    {(cart.length > 0) && <div className="header-controls-cart-full">{cart.length}</div>}
                     <div className="header-controls-cart-menu"></div>
                   </Link>
                 </div>

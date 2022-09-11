@@ -7,6 +7,7 @@ import Banner from "./Banner";
 import Cart from "./Cart";
 import NotFound from "./NotFound";
 import Card from "../Cards/Card";
+import Preloader from "../Preloader/Preloader";
 
 function Shop() {
   return (
@@ -16,12 +17,13 @@ function Shop() {
           <Route path="/" element={<MainPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/catalog" element={<Catalog />} />
-          <Route path="/catalog/1" element={<Card />} />
+          <Route path="/products/:id" element={<Card />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/cart" element = {<Cart />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Banner>
+      
     </div>
   );
 }

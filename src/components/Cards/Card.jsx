@@ -1,10 +1,33 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import useJsonFetch from "../../hooks/useJsonFetch"
+import { addProduct } from "../../store/slices/cartSlice";
+import Preloader from "../Preloader/Preloader";
 
 export default function Card() {
-    const [product, isLoading] = useJsonFetch("http://localhost:7070/api/items/34");
-    console.log(product);
+    const { id } = useParams();
+
+    const cart = useSelector(state => state.cart);
+    const dispatch = useDispatch();
+
+    const [selectedSize, setSize] = useState('');
+    const [quantity, setQuantity] = useState(1);
+    const [product, isLoading] = useJsonFetch(process.env.REACT_APP_URL + `/api/items/${id}`);
+
+    function changeQuantity(n) {
+        setQuantity(cur => cur = (cur + n < 1) ? 1 
+                                : (cur + n > 10) ? 10 
+                                : (cur + n));
+    }
+    function addToCart() {
+        localStorage.setItem(`product#${id}`, JSON.stringify(product));
+        dispatch(addProduct({product, selectedSize, quantity}))
+    }
+
     return (
-            <>{!product ? <p>загрузка</p> : <section className="catalog-item">
+            <>{!product ? <Preloader />: <section className="catalog-item">
             <h2 className="text-center">{product.title}</h2>
             <div className="row">
                 <div className="col-5">
@@ -41,17 +64,20 @@ export default function Card() {
                         </tbody>
                     </table>
                     <div className="text-center">
+                        
                         <p>Размеры в наличии:  {product.sizes.filter(o => o.avalible === true)
-                        .map(o => <span key={o.size} className="catalog-item-size selected">{o.size}</span>)
-}                       </p>
-                        <p>Количество: <span className="btn-group btn-group-sm pl-2">
-                                <button className="btn btn-secondary">-</button>
-                                <span className="btn btn-outline-primary">1</span>
-                                <button className="btn btn-secondary">+</button>
-                            </span>
+                        .map(o => <span key={o.size} className={"catalog-item-size" + (selectedSize ? " selected" : '')} onClick={() => setSize(o.size)}>{o.size}</span>)}                       
                         </p>
+                        {product.sizes.some(o => o.avalible === true) && <p>Количество: <span className="btn-group btn-group-sm pl-2">
+                                <button className="btn btn-secondary" onClick={() => changeQuantity(-1)}>-</button>
+                                <span className="btn btn-outline-primary">{quantity}</span>
+                                <button className="btn btn-secondary" onClick={() => changeQuantity(1)}>+</button>
+                            </span>
+                        </p>}
                     </div>
-                    <button className="btn btn-danger btn-block btn-lg">В корзину</button>
+                    {selectedSize && <Link to="/cart">
+                     <button className="btn btn-danger btn-block btn-lg" onClick={addToCart}>В корзину</button>
+                    </Link>}
                 </div>
             </div>
         </section>}</>
