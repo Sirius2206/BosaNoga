@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 export default function useJsonFetch(url, opts) {
   const [data, setData] = useState(opts);
@@ -10,15 +10,15 @@ export default function useJsonFetch(url, opts) {
       setLoading(true);
       const timestamp = Date.now();
       timestampRef.current = timestamp;
-      
+
       try {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(response.statusText);
         }
         if (timestampRef.current === timestamp) {
-          const data = await response.json();
-          setData(data);
+          const responseData = await response.json();
+          setData(responseData);
         }
         setError(null);
       } catch (e) {
@@ -29,7 +29,7 @@ export default function useJsonFetch(url, opts) {
     }
     fetchData();
 
-    return ()=> setData(null);
+    return () => setData(null);
   }, [url]);
 
   return [data, loading, error];
