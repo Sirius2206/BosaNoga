@@ -1,6 +1,6 @@
 import banner from "../../assets/img/banner.jpg";
 
-function Banner( props ) {
+function Banner(props) {
   return (
     <main className="container">
       <div className="row">

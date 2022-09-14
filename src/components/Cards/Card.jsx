@@ -8,13 +8,11 @@ import Preloader from "../Preloader/Preloader";
 
 export default function Card() {
     const { id } = useParams();
-
-    const cart = useSelector(state => state.cart);
     const dispatch = useDispatch();
 
     const [selectedSize, setSize] = useState('');
     const [quantity, setQuantity] = useState(1);
-    const [product, isLoading] = useJsonFetch(process.env.REACT_APP_URL + `/api/items/${id}`);
+    const [product] = useJsonFetch(process.env.REACT_APP_URL + `/api/items/${id}`);
 
     function changeQuantity(n) {
         setQuantity(cur => cur = (cur + n < 1) ? 1 
@@ -22,8 +20,7 @@ export default function Card() {
                                 : (cur + n));
     }
     function addToCart() {
-        localStorage.setItem(`product#${id}`, JSON.stringify(product));
-        dispatch(addProduct({product, selectedSize, quantity}))
+        dispatch(addProduct({product, selectedSize, quantity}));
     }
 
     return (

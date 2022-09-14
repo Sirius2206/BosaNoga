@@ -3,17 +3,17 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const fetchCatalog = createAsyncThunk(
   "catalogList/fetchCatalog",
   async function (url) {
-    const result = await fetch(url).then(result => result.json());
+    const result = await fetch(url).then((result) => result.json());
     return result;
   }
-)
+);
 export const handleMore = createAsyncThunk(
   "catalogList/handleMore",
   async function (url) {
-    const result = await fetch(url).then(result => result.json());
+    const result = await fetch(url).then((result) => result.json());
     return result;
   }
-)
+);
 
 export const catalogListSlice = createSlice({
   name: "catalogList",
@@ -29,7 +29,6 @@ export const catalogListSlice = createSlice({
     },
     [fetchCatalog.fulfilled]: (state, action) => {
       state.status = null;
-      console.log(action.payload);
       state.list = action.payload;
     },
     [fetchCatalog.rejected]: (state, action) => {},
@@ -42,7 +41,7 @@ export const catalogListSlice = createSlice({
       state.list = [...state.list, ...action.payload];
     },
     [handleMore.rejected]: (state, action) => {},
-  }
+  },
 });
 
 export const { changeCategory, reloadList, test } = catalogListSlice.actions;
