@@ -17,9 +17,11 @@ import Card from '../Cards/Card';
 
 import { restoreLocalStorage } from '../../store/slices/cartSlice';
 
+
 function Shop() {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
 
   //  Почему-то при тестах useEffect вызывается дважды. В интернете нашел,
   //  что это фича реакта и в деплое такого нет, но для сдачи диплома

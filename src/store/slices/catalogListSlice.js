@@ -4,6 +4,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const fetchCatalog = createAsyncThunk(
+<<<<<<< HEAD
   'catalogList/fetchCatalog',
   async (url) => {
     const result = await fetch(url).then((o) => o.json());
@@ -16,6 +17,20 @@ export const handleMore = createAsyncThunk(
     const result = await fetch(url).then((o) => o.json());
     return result;
   },
+=======
+  "catalogList/fetchCatalog",
+  async function (url) {
+    const result = await fetch(url).then((result) => result.json());
+    return result;
+  }
+);
+export const handleMore = createAsyncThunk(
+  "catalogList/handleMore",
+  async function (url) {
+    const result = await fetch(url).then((result) => result.json());
+    return result;
+  }
+>>>>>>> e480c2a64e25172dd7bfb9ea9b32c504c30450c5
 );
 
 export const catalogListSlice = createSlice({

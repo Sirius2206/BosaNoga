@@ -18,6 +18,7 @@ function Header() {
       setVisible(!searchVisible);
       return;
     }
+
     navigate('/catalog', { replace: true });
   }
   return (

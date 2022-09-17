@@ -31,7 +31,6 @@ export default function SearchInput() {
         if (result.length < 6) dispatch(toggleVisible(' invisible'));
       });
     dispatch(fetchCatalog(requestUrl));
-    dispatch(changeCategory(0));
   }
 
   return (

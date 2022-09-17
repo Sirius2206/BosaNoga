@@ -2,7 +2,6 @@ import React from 'react';
 import CardSmall from '../Cards/CardSmall';
 import Preloader from '../Preloader/Preloader';
 import Catalog from './Catalog';
-
 import useJsonFetch from '../../hooks/useJsonFetch';
 
 import { REQUEST_BESTSELLERS_URL } from '../../assets/constants';

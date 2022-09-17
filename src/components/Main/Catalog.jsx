@@ -35,6 +35,7 @@ function Catalog({ mainPage }) {
     if (count) {
       dispatch(fetchCatalog(REQUEST_ITEMS_URL));
       dispatch(fetchCategories(REQUEST_CATEGORIES_URL));
+
       count--;
     }
   }, []);
@@ -62,6 +63,7 @@ function Catalog({ mainPage }) {
         if (result.length < 6) dispatch(toggleVisible(' invisible'));
       });
     dispatch(handleMore(requestUrl + addOffset));
+
   }
 
   return (
@@ -80,6 +82,7 @@ function Catalog({ mainPage }) {
       ) : (
         <>
           <ul className="list-categories nav justify-content-center">
+
             {allCategoriesList
               && allCategoriesList.map((category) => (
                 <Category
