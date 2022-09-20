@@ -183,11 +183,9 @@ main {
   margin-bottom: 2em;
 }
 
-.catalog-item-card {
+.card {
   margin-bottom: 1em;
   height: calc(100% - 15px);
-
-
 }
 
 .catalog-item-size {

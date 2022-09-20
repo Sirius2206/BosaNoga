@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
+
+//Slice, ответственный за 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const fetchCatalog = createAsyncThunk(
@@ -10,13 +12,7 @@ export const fetchCatalog = createAsyncThunk(
     return result;
   },
 );
-export const fetchBestsellers = createAsyncThunk(
-  'catalogList/fetchBestsellers',
-  async (url) => {
-    const result = await fetch(url).then((o) => o.json());
-    return result;
-  },
-);
+
 export const handleMore = createAsyncThunk(
   'catalogList/handleMore',
   async (url) => {
