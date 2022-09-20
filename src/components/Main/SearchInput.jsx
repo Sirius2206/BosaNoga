@@ -7,7 +7,7 @@ import { REQUEST_ITEMS_URL } from '../../assets/constants';
 
 import useDebounce from '../../hooks/useDebounce';
 
-import { toggleVisible, fetchCatalog, changeCategory } from '../../store/slices/catalogListSlice';
+import { toggleVisible, fetchCatalog } from '../../store/slices/catalogListSlice';
 
 export default function SearchInput() {
   const { searchValue } = useSelector((state) => state.searchInput);

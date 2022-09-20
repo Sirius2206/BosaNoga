@@ -3,27 +3,33 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-no-useless-fragment */
+import { useEffect } from 'react';
 import { React, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import useJsonFetch from '../../hooks/useJsonFetch';
+
 import { addProduct } from '../../store/slices/cartSlice';
 import Preloader from '../Preloader/Preloader';
 
 import { REQUEST_ITEMS_URL } from '../../assets/constants';
+import { fetchCard } from '../../store/slices/cardSlice';
 
 export default function Card() {
+  const { product, status, error } = useSelector((state) => state.card);
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const [selectedSize, setSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [product] = useJsonFetch(`${REQUEST_ITEMS_URL}/${id}`);
+
+  useEffect (() => {
+    dispatch(fetchCard(`${REQUEST_ITEMS_URL}/${id}`));
+  }, [])
 
   function changeQuantity(n) {
     setQuantity((cur) => {
-      cur + n < 1
+      return cur + n < 1
         ? 1
         : cur + n > 10
           ? 10
@@ -37,9 +43,10 @@ export default function Card() {
 
   return (
     <>
-      {!product ? (
+    {error && <p style={{ textAlign: 'center' }}>{error.message}</p>}
+      {status ? (
         <Preloader />
-      ) : (
+        ) : (
         <section className="catalog-item">
           <h2 className="text-center">{product.title}</h2>
           <div className="row">
@@ -134,7 +141,8 @@ export default function Card() {
             </div>
           </div>
         </section>
-      )}
+        
+        )}
     </>
   );
 }

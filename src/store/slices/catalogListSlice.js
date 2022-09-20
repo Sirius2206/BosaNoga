@@ -4,8 +4,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const fetchCatalog = createAsyncThunk(
-<<<<<<< HEAD
   'catalogList/fetchCatalog',
+  async (url) => {
+    const result = await fetch(url).then((o) => o.json());
+    return result;
+  },
+);
+export const fetchBestsellers = createAsyncThunk(
+  'catalogList/fetchBestsellers',
   async (url) => {
     const result = await fetch(url).then((o) => o.json());
     return result;
@@ -17,20 +23,6 @@ export const handleMore = createAsyncThunk(
     const result = await fetch(url).then((o) => o.json());
     return result;
   },
-=======
-  "catalogList/fetchCatalog",
-  async function (url) {
-    const result = await fetch(url).then((result) => result.json());
-    return result;
-  }
-);
-export const handleMore = createAsyncThunk(
-  "catalogList/handleMore",
-  async function (url) {
-    const result = await fetch(url).then((result) => result.json());
-    return result;
-  }
->>>>>>> e480c2a64e25172dd7bfb9ea9b32c504c30450c5
 );
 
 export const catalogListSlice = createSlice({
@@ -53,18 +45,26 @@ export const catalogListSlice = createSlice({
     },
     [fetchCatalog.fulfilled]: (state, action) => {
       state.status = null;
+      state.error = null;
+      state.loadMoreVisible = '';
       state.list = action.payload;
     },
-    [fetchCatalog.rejected]: (state, action) => {},
+    [fetchCatalog.rejected]: (state) => {
+      state.error = new Error('При загрузке возникла ошибка');
+      state.status = null;
+    },
     [handleMore.pending]: (state) => {
-      state.status = 'loading';
       state.error = null;
     },
     [handleMore.fulfilled]: (state, action) => {
       state.status = null;
+      state.error = null;
+      if (action.payload.length < 6) state.loadMoreVisible = ' invisible';
       state.list = [...state.list, ...action.payload];
     },
-    [handleMore.rejected]: (state, action) => {},
+    [handleMore.rejected]: (state) => {
+      state.error = new Error('При загрузке возникла ошибка');
+    },
   },
 });
 

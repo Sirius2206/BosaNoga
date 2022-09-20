@@ -30,7 +30,9 @@ export const categoriesSlice = createSlice({
       state.status = null;
       state.categoriesList = action.payload;
     },
-    [fetchCategories.rejected]: (state, action) => {},
+    [fetchCategories.rejected]: (state) => {
+      state.error = new Error('При загрузке возникла ошибка');
+    },
   },
 });
 

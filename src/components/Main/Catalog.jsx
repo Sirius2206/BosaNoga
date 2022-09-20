@@ -1,18 +1,17 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
 /* eslint-disable react/prop-types */
 import { React, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleVisible, fetchCatalog, handleMore } from '../../store/slices/catalogListSlice';
 
 import CardSmall from '../Cards/CardSmall';
 import Category from '../Categories/Category';
 import SearchInput from './SearchInput';
 import Preloader from '../Preloader/Preloader';
 
-import {
-  fetchCategories,
-} from '../../store/slices/categoriesSlice';
+import { fetchCatalog, handleMore } from '../../store/slices/catalogListSlice';
+import { fetchCategories } from '../../store/slices/categoriesSlice';
 
 import {
   REQUEST_ITEMS_URL,
@@ -20,7 +19,9 @@ import {
 } from '../../assets/constants';
 
 function Catalog({ mainPage }) {
-  const { status, list, loadMoreVisible } = useSelector((state) => state.catalogList);
+  const {
+    status, list, error, loadMoreVisible,
+  } = useSelector((state) => state.catalogList);
   const { searchValue } = useSelector((state) => state.searchInput);
   const { currentCategory, categoriesList } = useSelector(
     (state) => state.categories,
@@ -35,7 +36,6 @@ function Catalog({ mainPage }) {
     if (count) {
       dispatch(fetchCatalog(REQUEST_ITEMS_URL));
       dispatch(fetchCategories(REQUEST_CATEGORIES_URL));
-
       count--;
     }
   }, []);
@@ -57,13 +57,7 @@ function Catalog({ mainPage }) {
     if (currentCategory !== 0) {
       requestUrl += `categoryId=${currentCategory}&`;
     }
-    fetch(requestUrl + addOffset)
-      .then((result) => result.json())
-      .then((result) => {
-        if (result.length < 6) dispatch(toggleVisible(' invisible'));
-      });
     dispatch(handleMore(requestUrl + addOffset));
-
   }
 
   return (
@@ -72,41 +66,41 @@ function Catalog({ mainPage }) {
       {mainPage || (
         <form
           id="catalog-search"
-          className="list-search-form form-inline"
+          className="catalog-search-form form-inline"
         >
           <SearchInput />
         </form>
       )}
+      {error && <p style={{ textAlign: 'center' }}>{error.message}</p>}
       {status ? (
-        <Preloader />
-      ) : (
-        <>
-          <ul className="list-categories nav justify-content-center">
-
-            {allCategoriesList
-              && allCategoriesList.map((category) => (
-                <Category
-                  key={category.id}
-                  data={category}
-                />
+          <Preloader />
+        ) : (
+          <>
+            <ul className="list-categories nav justify-content-center">
+              {allCategoriesList.length > 1
+                && allCategoriesList.map((category) => (
+                  <Category
+                    key={category.id}
+                    data={category}
+                  />
+                ))}
+            </ul>
+            <div className="row">
+              {list.map((item) => (
+                <CardSmall key={item.id} data={item} />
               ))}
-          </ul>
-          <div className="row">
-            {list.map((item) => (
-              <CardSmall key={item.id} data={item} />
-            ))}
-          </div>
-        </>
-      )}
-      <div className="text-center">
-        <button
-          type="button"
-          className={`btn btn-outline-primary ${loadMoreVisible}`}
-          onClick={onHandleMore}
-        >
-          Загрузить ещё
-        </button>
-      </div>
+            </div>
+            <div className="text-center">
+              <button
+                type="button"
+                className={`btn btn-outline-primary ${loadMoreVisible}`}
+                onClick={onHandleMore}
+              >
+                Загрузить ещё
+              </button>
+            </div>
+          </>
+        )}
     </section>
   );
 }

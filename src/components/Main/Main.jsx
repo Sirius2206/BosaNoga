@@ -17,11 +17,9 @@ import Card from '../Cards/Card';
 
 import { restoreLocalStorage } from '../../store/slices/cartSlice';
 
-
 function Shop() {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
 
   //  Почему-то при тестах useEffect вызывается дважды. В интернете нашел,
   //  что это фича реакта и в деплое такого нет, но для сдачи диплома
@@ -39,19 +37,17 @@ function Shop() {
   }, []);
 
   return (
-    <div>
-      <Banner>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/products/:id" element={<Card />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Banner>
-    </div>
+    <Banner>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/catalog" element={<Catalog />} />
+        <Route path="/products/:id" element={<Card />} />
+        <Route path="/contacts" element={<Contacts />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Banner>
   );
 }
 

@@ -19,27 +19,26 @@ const itemBasicMapper = item => ({
 });
 
 const randomNumber = (start, stop) => {
-    return Math.floor(Math.random() * (stop - start + 1)) + start;
+  return Math.floor(Math.random() * (stop - start + 1)) + start;
 }
 
 const fortune = (ctx, body = null, status = 200) => {
-    // Uncomment for delay
-    const delay = randomNumber(1, 10) * 1000;
-    // const delay = 0;
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Uncomment for error generation
-            // if (Math.random() > 0.1) {
-            //     reject(new Error('Something bad happened'));
-            //     return;
-            // }
-
-            ctx.response.status = status;
-            ctx.response.body = body;
-            resolve();
-        }, delay);
-    })
-}
+  // Uncomment for delay
+//   const delay = randomNumber(1, 10) * 1000;
+  const delay = 0;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+    // Uncomment for error generation
+    // if (Math.random() > 0.1) {
+    //     reject(new Error('Something bad happened'));
+    //     return;
+    // }     
+      ctx.response.status = status;
+      ctx.response.body = body;
+      resolve();
+    }, delay);
+  });
+};
 
 const app = new Koa();
 app.use(cors());

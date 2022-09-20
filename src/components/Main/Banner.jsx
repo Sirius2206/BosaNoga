@@ -1,4 +1,7 @@
-import banner from "../../assets/img/banner.jpg";
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+import React from 'react';
+import banner from '../../assets/img/banner.jpg';
 
 function Banner(props) {
   return (
