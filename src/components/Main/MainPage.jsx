@@ -24,10 +24,18 @@ function Main() {
     }
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        dispatch(fetchBestsellers(REQUEST_BESTSELLERS_URL));
+      }, 1000);
+    }
+  },[error]);
+
   return (
     <>
       {error && <p style={{ textAlign: 'center' }}>{error.message}</p>}
-      {status ? (
+      {status === 'loading' ? (
           <Preloader />
         ) : (
           <section className="top-sales">

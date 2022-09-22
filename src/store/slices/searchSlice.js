@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
+//Слайс для значения поиска.
 export const searchSlice = createSlice({
   name: 'searchInput',
   initialState: {

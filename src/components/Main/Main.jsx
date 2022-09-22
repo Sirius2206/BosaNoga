@@ -7,12 +7,12 @@ import { Routes, Route } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import MainPage from './MainPage';
-import About from './About';
+import About from './Non-interactive/About';
 import Catalog from './Catalog';
-import Contacts from './Contacts';
-import Banner from './Banner';
+import Contacts from './Non-interactive/Contacts';
+import Banner from './Non-interactive/Banner';
 import Cart from './Cart';
-import NotFound from './NotFound';
+import NotFound from './Non-interactive/NotFound';
 import Card from '../Cards/Card';
 
 import { restoreLocalStorage } from '../../store/slices/cartSlice';

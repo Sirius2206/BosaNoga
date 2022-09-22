@@ -106,7 +106,7 @@ main {
   position: relative;
 }
 
-.banner-header {
+.banner-title {
   position: absolute;
   z-index: 5;
   right: 0;

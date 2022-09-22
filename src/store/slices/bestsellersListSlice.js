@@ -15,12 +15,11 @@ export const bestsellersListSlice = createSlice({
   name: 'bestsellersList',
   initialState: {
     list: [],
-    status: null,
+    status: 'loading',
     error: null,
   },
   extraReducers: {
     [fetchBestsellers.pending]: (state) => {
-      state.status = 'loading';
       state.error = null;
     },
     [fetchBestsellers.fulfilled]: (state, action) => {
@@ -29,7 +28,6 @@ export const bestsellersListSlice = createSlice({
       state.bestsellersList = action.payload;
     },
     [fetchBestsellers.rejected]: (state) => {
-      state.status = null;
       state.error = new Error('При загрузке возникла ошибка');
     },
   },

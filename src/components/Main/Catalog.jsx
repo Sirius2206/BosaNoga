@@ -20,10 +20,10 @@ import {
 
 function Catalog({ mainPage }) {
   const {
-    status, list, error, loadMoreVisible,
+    status: catalogStatus, list, error: catalogError, handleMoreError, loadMoreVisible,
   } = useSelector((state) => state.catalogList);
   const { searchValue } = useSelector((state) => state.searchInput);
-  const { currentCategory, categoriesList } = useSelector(
+  const { currentCategory, categoriesList, error: categoriesError, status: categoriesStatus } = useSelector(
     (state) => state.categories,
   );
   const dispatch = useDispatch();
@@ -39,6 +39,21 @@ function Catalog({ mainPage }) {
       count--;
     }
   }, []);
+  useEffect(() => {
+    if (catalogError) {
+      setTimeout(() => {
+        dispatch(fetchCatalog(REQUEST_ITEMS_URL));
+      }, 1000);
+    }
+  },[catalogError]);
+
+  useEffect(() => {
+    if (categoriesError) {
+      setTimeout(() => {
+        dispatch(fetchCategories(REQUEST_CATEGORIES_URL));
+      }, 1000);
+    }
+  },[categoriesError]);
 
   const allCategoriesList = [
     {
@@ -71,14 +86,14 @@ function Catalog({ mainPage }) {
           <SearchInput />
         </form>
       )}
-      {error && <p style={{ textAlign: 'center' }}>{error.message}</p>}
-      {status ? (
+      {catalogError && <p style={{ textAlign: 'center' }}>{catalogError.message}</p>}
+      {catalogStatus === 'loading' ? (
           <Preloader />
         ) : (
           <>
             <ul className="list-categories nav justify-content-center">
-              {allCategoriesList.length > 1
-                && allCategoriesList.map((category) => (
+            {categoriesError && <p style={{ textAlign: 'center' }}>{categoriesError.message}</p>}
+            {categoriesStatus === 'loading' || allCategoriesList.map((category) => (
                   <Category
                     key={category.id}
                     data={category}
@@ -98,6 +113,7 @@ function Catalog({ mainPage }) {
               >
                 Загрузить ещё
               </button>
+              {handleMoreError && <p style={{ textAlign: 'center' }}>{handleMoreError.message}</p>}
             </div>
           </>
         )}

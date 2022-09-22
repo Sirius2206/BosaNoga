@@ -8,6 +8,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 export const fetchCatalog = createAsyncThunk(
   'catalogList/fetchCatalog',
   async (url) => {
+    console.log(url);
     const result = await fetch(url).then((o) => o.json());
     return result;
   },
@@ -20,13 +21,15 @@ export const handleMore = createAsyncThunk(
     return result;
   },
 );
-
+// Слайс для работы с элементами каталога: список товаров, загрузка, ошибка, 
+// кнопка "Загрузить еще"
 export const catalogListSlice = createSlice({
   name: 'catalogList',
   initialState: {
     list: [],
     status: null,
     error: null,
+    handleMoreError: null,
     loadMoreVisible: '',
   },
   reducers: {
@@ -50,16 +53,16 @@ export const catalogListSlice = createSlice({
       state.status = null;
     },
     [handleMore.pending]: (state) => {
-      state.error = null;
+      state.handleMoreError = null;
     },
     [handleMore.fulfilled]: (state, action) => {
       state.status = null;
-      state.error = null;
+      state.handleMoreError = null;
       if (action.payload.length < 6) state.loadMoreVisible = ' invisible';
       state.list = [...state.list, ...action.payload];
     },
     [handleMore.rejected]: (state) => {
-      state.error = new Error('При загрузке возникла ошибка');
+      state.handleMoreError = new Error('При загрузке возникла ошибка. Попробуйте еще раз');
     },
   },
 });

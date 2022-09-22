@@ -10,11 +10,14 @@ export const fetchCategories = createAsyncThunk(
   },
 );
 
+//Слайс для выбора категории в каталоге
 export const categoriesSlice = createSlice({
   name: 'categories',
   initialState: {
     categoriesList: [],
     currentCategory: 0,
+    status: 'loading',
+    error: null,
   },
   reducers: {
     changeCategory: (state, action) => {
@@ -23,15 +26,15 @@ export const categoriesSlice = createSlice({
   },
   extraReducers: {
     [fetchCategories.pending]: (state) => {
-      state.status = 'loading';
       state.error = null;
     },
     [fetchCategories.fulfilled]: (state, action) => {
       state.status = null;
+      state.error = null;
       state.categoriesList = action.payload;
     },
     [fetchCategories.rejected]: (state) => {
-      state.error = new Error('При загрузке возникла ошибка');
+      state.error = new Error('При загрузке категорий возникла ошибка');
     },
   },
 });

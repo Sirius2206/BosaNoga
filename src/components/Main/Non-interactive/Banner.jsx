@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 import React from 'react';
-import banner from '../../assets/img/banner.jpg';
+import banner from '../../../assets/img/banner.jpg';
 
 function Banner(props) {
   return (
@@ -9,8 +9,8 @@ function Banner(props) {
       <div className="row">
         <div className="col">
           <div className="banner">
+            <h2 className="banner-title">К весне готовы!</h2>
             <img src={banner} className="img-fluid" alt="К весне готовы!" />
-            <h2 className="banner-header">К весне готовы!</h2>
           </div>
           {props.children}
         </div>
